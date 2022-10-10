@@ -8,6 +8,9 @@ enum class GameState {
     RedWon,
     YellowWon,
     Ongoing,
-    CouldNotDropChip,
-    InputInvalid
+}
+
+enum class OuterGameLoopStates {
+    NewGame,
+    CloseProgram
 }
