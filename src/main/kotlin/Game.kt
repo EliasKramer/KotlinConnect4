@@ -9,14 +9,55 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
         playerR = Player(redPlayerName, GameChip.RedChip)
         playerY = Player(yellowPlayerName, GameChip.YellowChip)
         //this duplicate code cannot be avoided. cannot call setupBoard from init
-        board = Board()
+        board = Board(1,1)
         currPlayer = playerR;
     }
     private fun setupNewGame()
     {
         println("initializing new board and setting first player to red")
-        board = Board()
+        println("input board size")
+        board = Board(
+            getNumberInputFromPlayer("Please enter the length for the board:"),
+            getNumberInputFromPlayer("Please enter the width for the board:")
+        )
         currPlayer = playerR;
+    }
+    private fun getNumberInputFromPlayer(inputRequestString: String) : Int
+    {
+        var firstIteration = true;
+        while(true)
+        {
+            if(firstIteration)
+            {
+                firstIteration = false;
+            }
+            else
+            {
+                println("try again")
+            }
+
+            println(inputRequestString);
+            val rawInput = readLine() ?: continue;
+
+            if(!isInt(rawInput))
+            {
+                continue;
+            }
+
+            val intInput: Int = Integer.parseInt(rawInput);
+
+            if(intInput > 9)
+            {
+                println("too big number")
+                continue;
+            }
+            else if(intInput < 4)
+            {
+                println("too small number")
+                continue;
+            }
+            return intInput;
+        }
     }
     fun start() {
         var instructionForNextLoop: OuterGameLoopStates;
@@ -57,11 +98,15 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
     }
 
     private fun handleWin(state: GameState) {
-        print("handling potential win")
+        println("handling potential win")
         if (state == GameState.RedWon) {
+            println("--------")
             println("Red won!")
+            println("--------")
         } else if (state == GameState.YellowWon) {
+            println("-----------")
             println("Yellow won!")
+            println("-----------")
         }
     }
 

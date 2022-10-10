@@ -1,13 +1,20 @@
 import java.lang.Exception
 import java.util.LinkedList
 
-class Board {
-    val _length = 5;
-    val _width = 6;
-    val _internalBoard = Array(_length) { Array(_width) { GameChip.Empty } };
+class Board(
+    private val _length: Int,
+    private val _width: Int
+) {
+    private val _internalBoard: Array<Array<GameChip>> = Array(_length) { Array(_width) { GameChip.Empty } }
 
     fun print() {
-        var resultStr = "";
+        var resultStr = "|";
+        for(i in 0 until _width)
+        {
+            val currPosVal = i+1
+            resultStr += "$currPosVal|";
+        }
+        resultStr += "\n"
         for (row in _internalBoard) {
             resultStr += "|";
             for (currChip in row) {
@@ -31,11 +38,10 @@ class Board {
 
     fun idxIsLegal(idx: Int): Boolean {
         val retVal = idx >= 0 && idx < _width &&
-            (_internalBoard[0][idx] == GameChip.Empty);
+                (_internalBoard[0][idx] == GameChip.Empty);
         println("checking if move index is legal")
         print("The move was ")
-        if(!retVal)
-        {
+        if (!retVal) {
             print("not ")
         }
         print("legal\n");
