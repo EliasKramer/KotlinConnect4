@@ -8,7 +8,7 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
     init {
         playerR = Player(redPlayerName, GameChip.RedChip)
         playerY = Player(yellowPlayerName, GameChip.YellowChip)
-        board = Board()
+        board = Board(6,6)
 
         currPlayer = playerR;
     }

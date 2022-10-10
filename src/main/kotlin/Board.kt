@@ -1,8 +1,11 @@
-class Board {
-    val _length = 5;
-    val _width = 6;
-    val _internalBoard = Array(_length) { Array(_width) { GameChip.Empty } };
-
+class Board(
+    val _length: Int,
+    val _width: Int,
+) {
+    val _internalBoard: Array<Array<GameChip>>;
+init {
+    _internalBoard = Array(_length) { Array(_width) { GameChip.Empty } }
+}
     fun print() {
         var resultStr = "";
         for (row in _internalBoard) {
