@@ -35,11 +35,16 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
         var currentGameState: GameState;
         do {
             println("getting player input")
-            val droppingIdx = getPlayerInput();
+            val playerInput = getPlayerInput();
 
+            println("handling special cases")
+            if(playerInput.second != OuterGameLoopStates.None)
+            {
+                println("found special case. returning to outer game loop")
+                return playerInput.second;
+            }
 
-
-            currentGameState = executeMove(currPlayer.getChip(), droppingIdx);
+            currentGameState = executeMove(currPlayer.getChip(), playerInput.first);
 
             board.print()
 
@@ -48,10 +53,11 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
             switchCurrentPlayer();
         } while (currentGameState == GameState.Ongoing);
 
-        return OuterGameLoopStates.NewGame;
+        return OuterGameLoopStates.None;
     }
 
     private fun handleWin(state: GameState) {
+        print("handling potential win")
         if (state == GameState.RedWon) {
             println("Red won!")
         } else if (state == GameState.YellowWon) {
@@ -59,17 +65,24 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
         }
     }
 
-    private fun getPlayerInput(): Int{
-
+    private fun getPlayerInput(): Pair<Int, OuterGameLoopStates>{
         while (true) {
             println("getting the player input")
-            var rawInput = readLine();
+            val rawInput = readLine();
 
             if (rawInput == null) {
                 println("input is required");
                 continue;
             }
-            handleSpecialInputs(toString());
+
+            //handle special inputs
+            if(rawInput == "0")
+            {
+                return Pair(-1,OuterGameLoopStates.CloseProgram);
+            }
+            else if(rawInput == "N\n"){
+                return Pair(-1, OuterGameLoopStates.NewGame)
+            }
 
             val playerInput: String = rawInput;
             if (!isInt(playerInput)) {
@@ -81,7 +94,7 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
 
             if (board.idxIsLegal(playerInputIdx)) {
                 println("valid input was given by the player")
-                return playerInputIdx;
+                return Pair(playerInputIdx, OuterGameLoopStates.None);
             } else {
                 println("Input was not valid");
             }
@@ -103,6 +116,7 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
     }
 
     private fun switchCurrentPlayer() {
+        println("switching current player")
         currPlayer =
             if (currPlayer == playerR) {
                 playerY;

@@ -12,5 +12,6 @@ enum class GameState {
 
 enum class OuterGameLoopStates {
     NewGame,
-    CloseProgram
+    CloseProgram,
+    None
 }
