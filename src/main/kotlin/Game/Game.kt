@@ -1,4 +1,12 @@
-class Game(redPlayerName: String, yellowPlayerName: String) {
+package Game
+
+import GameChip
+import GameState
+import OuterGameLoopStates
+import Player.Player
+import isInt
+
+class Game(redPlayer: Player, yellowPlayer: Player) {
     private val playerR: Player;
     private val playerY: Player;
     private var board: Board;
@@ -6,10 +14,12 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
     private var currPlayer: Player;
 
     init {
-        playerR = Player(redPlayerName, GameChip.RedChip)
-        playerY = Player(yellowPlayerName, GameChip.YellowChip)
+        playerR = redPlayer;
+        redPlayer.setChip(GameChip.RedChip);
+        playerY = yellowPlayer;
+        yellowPlayer.setChip(GameChip.YellowChip);
         //this duplicate code cannot be avoided. cannot call setupBoard from init
-        board = Board(1,1)
+        board = Board(4,4)
         currPlayer = playerR;
     }
     private fun setupNewGame()
@@ -38,7 +48,10 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
 
             println(inputRequestString);
             val rawInput = readLine() ?: continue;
-
+            if(rawInput == "")
+            {
+                continue;
+            }
             if(!isInt(rawInput))
             {
                 continue;
@@ -72,11 +85,13 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
     private fun gameLoop() : OuterGameLoopStates
     {
         println("started game loop")
-        board.print()
         var currentGameState: GameState;
         do {
+            println("Current Player.Player's turn: ${currPlayer.getName()}")
+            board.print()
+
             println("getting player input")
-            val playerInput = getPlayerInput();
+            val playerInput = currPlayer.getMove(board);// getPlayerInput();
 
             println("handling special cases")
             if(playerInput.second != OuterGameLoopStates.None)
@@ -86,8 +101,6 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
             }
 
             currentGameState = executeMove(currPlayer.getChip(), playerInput.first);
-
-            board.print()
 
             handleWin(currentGameState);
 
@@ -100,60 +113,16 @@ class Game(redPlayerName: String, yellowPlayerName: String) {
     private fun handleWin(state: GameState) {
         println("handling potential win")
         if (state == GameState.RedWon) {
+            board.print()
             println("--------")
             println("Red won!")
             println("--------")
         } else if (state == GameState.YellowWon) {
+            board.print()
             println("-----------")
             println("Yellow won!")
             println("-----------")
         }
-    }
-
-    private fun getPlayerInput(): Pair<Int, OuterGameLoopStates>{
-        while (true) {
-            println("getting the player input")
-            val rawInput = readLine();
-
-            if (rawInput == null) {
-                println("input is required");
-                continue;
-            }
-
-            //handle special inputs
-            if(rawInput == "0")
-            {
-                return Pair(-1,OuterGameLoopStates.CloseProgram);
-            }
-            else if(rawInput == "N\n"){
-                return Pair(-1, OuterGameLoopStates.NewGame)
-            }
-
-            val playerInput: String = rawInput;
-            if (!isInt(playerInput)) {
-                println("input has to be a number")
-                continue
-            }
-
-            val playerInputIdx: Int = Integer.parseInt(playerInput)-1;
-
-            if (board.idxIsLegal(playerInputIdx)) {
-                println("valid input was given by the player")
-                return Pair(playerInputIdx, OuterGameLoopStates.None);
-            } else {
-                println("Input was not valid");
-            }
-        }
-    }
-
-    private fun isInt(str: String) = str.all { it in '0'..'9' };
-    private fun handleSpecialInputs(input: String) {
-        println("handling special inputs")
-        //TODO
-        // "0" should end the game immediately
-        // "N\n" should start a new game
-        println("no special cases found")
-        println()
     }
 
     private fun executeMove(chip: GameChip, idx: Int): GameState {

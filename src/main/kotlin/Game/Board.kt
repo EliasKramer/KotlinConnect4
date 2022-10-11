@@ -1,3 +1,7 @@
+package Game
+
+import GameChip
+import GameState
 import java.lang.Exception
 import java.util.LinkedList
 
@@ -6,6 +10,23 @@ class Board(
     private val _width: Int
 ) {
     private val _internalBoard: Array<Array<GameChip>> = Array(_length) { Array(_width) { GameChip.Empty } }
+
+    init{
+        //_internalBoard[3][1] = GameChip.RedChip;
+    }
+    public fun getCopy() : Board{
+        val board = Board(_length, _width);
+
+        for(length in 0 until _length)
+        {
+            for(width in 0 until _width)
+            {
+                board._internalBoard[length][width] = _internalBoard[length][width];
+            }
+        }
+
+        return board;
+    }
 
     fun print() {
         var resultStr = "|";
@@ -39,18 +60,18 @@ class Board(
     fun idxIsLegal(idx: Int): Boolean {
         val retVal = idx >= 0 && idx < _width &&
                 (_internalBoard[0][idx] == GameChip.Empty);
-        println("checking if move index is legal")
-        print("The move was ")
+       // println("checking if move index is legal")
+        //print("The move was ")
         if (!retVal) {
-            print("not ")
+            //print("not ")
         }
-        print("legal\n");
+        //print("legal\n");
         return retVal;
     }
 
     fun dropChip(gameChip: GameChip, widthIdx: Int): GameState {
         var colToPlace = -1;
-        println("iterating from the bottom up at the given index, till there is a empty spot where the chip can go to")
+        //println("iterating from the bottom up at the given index, till there is a empty spot where the chip can go to")
         for (i in _length - 1 downTo 0) {
             if (_internalBoard[i][widthIdx] == GameChip.Empty) {
                 colToPlace = i;
@@ -58,18 +79,18 @@ class Board(
             }
         }
         if (colToPlace == -1) {
-            throw Exception("no valid idx to drop was found in the execution")
+            throw Exception("no valid idx to drop was found in the execution. $widthIdx was not valid")
         }
 
-        println("placed chip")
+        //println("placed chip")
         _internalBoard[colToPlace][widthIdx] = gameChip;
 
-        println("evaluating board")
+        //println("evaluating board")
         return evaluateBoard(colToPlace, widthIdx, gameChip);
     }
 
     private fun evaluateBoard(col: Int, row: Int, chip: GameChip): GameState {
-        println("check if 4 are connected to the current droppped chip")
+        //println("check if 4 are connected to the current droppped chip")
         val currPlayerWon: Boolean =
             checkIf4Connected(col, row, 0, 1, chip) ||
                     checkIf4Connected(col, row, 1, 0, chip) ||
@@ -77,15 +98,15 @@ class Board(
 
         if (currPlayerWon) {
             return if (chip == GameChip.RedChip) {
-                println("red won")
+                //println("red won")
                 GameState.RedWon;
             } else {
-                println("yellow won")
+                //println("yellow won")
                 GameState.YellowWon;
             }
         }
 
-        println("the game is still ongoing")
+        //println("the game is still ongoing")
         return GameState.Ongoing;
     }
 
@@ -97,8 +118,8 @@ class Board(
         var foundConnected = 0;
         val dirMult = arrayOf<Int>(1, -1);
 
-        println("checking in the given direction")
-        println("if the there are 3 or more neighbor pieces in the given direction then the game is won")
+        //println("checking in the given direction")
+        //println("if the there are 3 or more neighbor pieces in the given direction then the game is won")
 
         for (currDirMult in dirMult) {
             var currCol = col + (colOffset * currDirMult);
