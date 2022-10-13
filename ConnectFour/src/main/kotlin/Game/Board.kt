@@ -11,9 +11,6 @@ class Board(
 ) {
     private val _internalBoard: Array<Array<GameChip>> = Array(_length) { Array(_width) { GameChip.Empty } }
 
-    init{
-        //_internalBoard[3][1] = GameChip.RedChip;
-    }
     public fun getCopy() : Board{
         val board = Board(_length, _width);
 

@@ -12,21 +12,22 @@ class IntelligentPlayer(_name: String) : Player(_name) {
     override fun getMove(board: Board): Pair<Int, OuterGameLoopStates> {
         _nodesSearched = 0;
         val allMoves = board.getLegalMoves();
-        var chosenMove: Int = 0;
+        var chosenMove = 0;
         var bestMoveScore = Int.MIN_VALUE;
         val depth = 8;
 
-        var multiplier = 1;
-
-        if (_chip == GameChip.YellowChip) {
-            multiplier = -1;
-        }
+        var multiplier =
+            if (_chip == GameChip.YellowChip) {
+                -1;
+            } else {
+                1
+            }
 
         for (currIdx in allMoves) {
             val copyBoard = board.getCopy();
-            val retVal = copyBoard.dropChip(_chip, currIdx);
+            val gameStateAfterDropping = copyBoard.dropChip(_chip, currIdx);
 
-            var currEval = when (retVal) {
+            var currEval = when (gameStateAfterDropping) {
                 GameState.RedWon -> {
                     (1000 + depth + 1) * multiplier;
                 }
@@ -34,10 +35,11 @@ class IntelligentPlayer(_name: String) : Player(_name) {
                     -(1000 + depth + 1) * multiplier;
                 }
                 else -> {
-                    multiplier * getRecursiveScoreOfMove(copyBoard, oppositeColorChip(_chip), depth-1);
+                    multiplier * getRecursiveScoreOfMove(copyBoard, oppositeColorChip(_chip), depth - 1);
                 }
             }
-            println("move: $currIdx has score: $currEval")
+            val oneBasedIdx = currIdx + 1;
+            println("move: $oneBasedIdx has score: $currEval")
 
             if (currEval > bestMoveScore) {
                 bestMoveScore = currEval;
@@ -53,22 +55,20 @@ class IntelligentPlayer(_name: String) : Player(_name) {
             return 0;
         } else {
             val allLegalMoves = board.getLegalMoves();
-            var bestMoveScore = 0;
+            var bestMoveScore = Int.MIN_VALUE;
+
             for (currIdx in allLegalMoves) {
                 _nodesSearched++;
                 val copyBoard = board.getCopy();
                 val retVal = copyBoard.dropChip(gameChip, currIdx);
 
-                if(retVal == GameState.RedWon)
-                {
+                if (retVal == GameState.RedWon) {
                     return (1000 + depth);
-                }
-                else if(retVal == GameState.YellowWon)
-                {
+                } else if (retVal == GameState.YellowWon) {
                     return -(1000 + depth);
                 }
 
-               val currEval = -getRecursiveScoreOfMove(copyBoard, oppositeColorChip(gameChip), depth - 1);
+                val currEval = -getRecursiveScoreOfMove(copyBoard, oppositeColorChip(gameChip), depth - 1);
 
                 if (currEval > bestMoveScore) {
                     bestMoveScore = currEval;
