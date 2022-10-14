@@ -110,6 +110,7 @@ class Game(redPlayer: Player, yellowPlayer: Player) {
                 return playerInput.second;
             }
 
+            println("Move Played: " + (playerInput.first + 1))
             currentGameState = executeMove(currPlayer.getChip(), playerInput.first);
             GameLogger.logMove(playerInput.first, currPlayer.getChip());
 

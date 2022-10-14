@@ -12,7 +12,7 @@ class IntelligentPlayer(_name: String) : Player(_name) {
     override fun getMove(board: Board): Pair<Int, OuterGameLoopStates> {
         _nodesSearched = 0;
         val allMoves = board.getLegalMoves();
-        var chosenMove = 0;
+        var chosenMove = allMoves[Random.nextInt(0, allMoves.size)];
         var bestMoveScore = Int.MIN_VALUE;
         val depth = 8;
 
