@@ -11,4 +11,7 @@ class RandomPlayer(_name: String) : Player(_name) {
 
         return Pair(allMoves[chosenMove], OuterGameLoopStates.None);
     }
+    protected override fun getPlayerType(): String {
+        return "(Random Player)";
+    }
 }

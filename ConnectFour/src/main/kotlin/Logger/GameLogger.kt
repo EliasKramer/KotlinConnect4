@@ -1,6 +1,7 @@
 package Logger
 
 import GameChip
+import Player.Player
 import java.io.File
 
 class GameLogger {
@@ -13,10 +14,12 @@ class GameLogger {
             addToLog(stringToAdd);
         }
 
-        fun newGame(length: Int, width: Int) {
+        fun newGame(length: Int, width: Int, player1: Player, player2: Player) {
             val stringToAdd =
                 "--------\n" +
                         "NEW GAME (l" + length + ":w" + width + ")\n" +
+                        "player 1: " + player1.getName() + "\n" +
+                        "player 2: " + player2.getName() + "\n" +
                         "________\n";
             addToLog(stringToAdd);
         }

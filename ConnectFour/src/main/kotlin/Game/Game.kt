@@ -87,7 +87,7 @@ class Game(redPlayer: Player, yellowPlayer: Player) {
     {
         println("started game loop")
         var currentGameState: GameState;
-        GameLogger.newGame(board.getLength(), board.getWidth());
+        GameLogger.newGame(board.getLength(), board.getWidth(), playerR, playerY);
         do {
             println("Current Player's turn: ${currPlayer.getName()}")
             board.print()

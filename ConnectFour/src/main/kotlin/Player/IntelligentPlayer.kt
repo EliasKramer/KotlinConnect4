@@ -77,4 +77,7 @@ class IntelligentPlayer(_name: String) : Player(_name) {
             return bestMoveScore;
         }
     }
+    protected override fun getPlayerType(): String {
+        return "(Intelligent Player)";
+    }
 }
