@@ -10,8 +10,6 @@ open class Player(
 ) {
     protected var _chip: GameChip = GameChip.Empty;
 
-
-
     open fun getMove(board: Board): Pair<Int, OuterGameLoopStates>{
         while (true) {
             println("getting the player input")

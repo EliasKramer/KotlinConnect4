@@ -61,14 +61,8 @@ class Board(
     }
 
     fun idxIsLegal(idx: Int): Boolean {
-        val retVal = idx >= 0 && idx < _width &&
+        val retVal = idx in 0 until _width &&
                 (_internalBoard[0][idx] == GameChip.Empty);
-       // println("checking if move index is legal")
-        //print("The move was ")
-        if (!retVal) {
-            //print("not ")
-        }
-        //print("legal\n");
         return retVal;
     }
 
@@ -93,7 +87,7 @@ class Board(
     }
 
     private fun evaluateBoard(col: Int, row: Int, chip: GameChip): GameState {
-        //println("check if 4 are connected to the current droppped chip")
+        //println("check if 4 are connected to the current dropped chip")
         val currPlayerWon: Boolean =
             checkIf4Connected(col, row, 0, 1, chip) ||
                     checkIf4Connected(col, row, 1, 0, chip) ||
