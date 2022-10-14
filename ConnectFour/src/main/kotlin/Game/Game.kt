@@ -2,6 +2,7 @@ package Game
 
 import GameChip
 import GameState
+import Logger.GameLogger
 import OuterGameLoopStates
 import Player.Player
 import isInt
@@ -86,12 +87,21 @@ class Game(redPlayer: Player, yellowPlayer: Player) {
     {
         println("started game loop")
         var currentGameState: GameState;
+        GameLogger.newGame(board.getLength(), board.getWidth());
         do {
             println("Current Player's turn: ${currPlayer.getName()}")
             board.print()
 
+            println("see if player has valid inputs")
+            if(board.getLegalMoves().isEmpty())
+            {
+                println("The Game has ended. No valid moves available.")
+                GameLogger.gameEndMsg("No Moves left\n")
+                return OuterGameLoopStates.None;
+            }
+
             println("getting player input")
-            val playerInput = currPlayer.getMove(board);// getPlayerInput();
+            val playerInput = currPlayer.getMove(board.getCopy());// getPlayerInput();
 
             println("handling special cases")
             if(playerInput.second != OuterGameLoopStates.None)
@@ -101,6 +111,7 @@ class Game(redPlayer: Player, yellowPlayer: Player) {
             }
 
             currentGameState = executeMove(currPlayer.getChip(), playerInput.first);
+            GameLogger.logMove(playerInput.first, currPlayer.getChip());
 
             handleWin(currentGameState);
 
@@ -117,11 +128,13 @@ class Game(redPlayer: Player, yellowPlayer: Player) {
             println("--------")
             println("Red won!")
             println("--------")
+            GameLogger.gameEndMsg("Red Won\n")
         } else if (state == GameState.YellowWon) {
             board.print()
             println("-----------")
             println("Yellow won!")
             println("-----------")
+            GameLogger.gameEndMsg("Yellow Won\n")
         }
     }
 

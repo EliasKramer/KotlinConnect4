@@ -124,6 +124,9 @@ fabric.properties
 # BlueJ files
 *.ctxt
 
+# should ignore log files
+logged_games.txt
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 

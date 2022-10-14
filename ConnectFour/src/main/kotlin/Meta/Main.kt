@@ -4,6 +4,6 @@ import Player.Player
 import Player.RandomPlayer
 
 fun main() {
-    val game = Game(Player("Red Player"), IntelligentPlayer("Intelligent Yellow Player"));
+    val game = Game(Player("Red Player"), Player("Intelligent Yellow Player"));
     game.start();
 }

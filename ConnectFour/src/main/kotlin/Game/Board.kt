@@ -44,6 +44,12 @@ class Board(
         println(resultStr);
     }
 
+    fun getLength(): Int {
+        return _length;
+    }
+    fun getWidth(): Int {
+        return _width;
+    }
     fun getLegalMoves(): List<Int> {
         var retVal = LinkedList<Int>();
         for (i in 0 until _width) {
@@ -91,6 +97,7 @@ class Board(
         val currPlayerWon: Boolean =
             checkIf4Connected(col, row, 0, 1, chip) ||
                     checkIf4Connected(col, row, 1, 0, chip) ||
+                    checkIf4Connected(col, row, -1, 1, chip) ||
                     checkIf4Connected(col, row, 1, 1, chip);
 
         if (currPlayerWon) {
