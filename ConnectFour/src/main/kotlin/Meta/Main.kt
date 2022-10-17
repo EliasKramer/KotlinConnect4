@@ -3,6 +3,6 @@ import Player.IntelligentPlayer
 import Player.Player
 
 fun main() {
-    val game = Game(Player("Human"), IntelligentPlayer("Unoptimized Minimax"));
+    val game = Game(IntelligentPlayer("Unoptimized Minimax"), IntelligentPlayer("Unoptimized Minimax"));
     game.start();
 }
